@@ -1,4 +1,4 @@
-# PromptWise AI Engine
+﻿# PromptWise AI Engine
 
 Optimize with evidence, not token count alone. PromptWise compares an original prompt with a
 High-Context and a Low-Token alternative on tokens, cost, requirement preservation and
@@ -9,20 +9,20 @@ Reference documents (do not modify): `CodeAkatsuki.pdf`, `PromptWise_Architectur
 
 ## Status
 
-- M0 — backend foundation (configuration + health endpoint).
-- M1 — request/response schemas and enums (`backend/app/schemas/`).
-- M2 — request validation and verified model catalog (`backend/app/modules/validation.py`,
+- M0 â€” backend foundation (configuration + health endpoint).
+- M1 â€” request/response schemas and enums (`backend/app/schemas/`).
+- M2 â€” request validation and verified model catalog (`backend/app/modules/validation.py`,
   `backend/app/modules/catalog.py`, `backend/app/data/model_catalog.json`).
-- M3 — failure-alerts collector and alert factories (`backend/app/modules/alerts.py`), structured
+- M3 â€” failure-alerts collector and alert factories (`backend/app/modules/alerts.py`), structured
   error responses with secret redaction (`backend/app/core/errors.py`, `redaction.py`).
-- M4a — offline token estimation and token-reduction maths (`backend/app/modules/tokens.py`).
-- M6R — rule-based requirement extraction (`backend/app/modules/requirements/rules.py`): explicit
+- M4a â€” offline token estimation and token-reduction maths (`backend/app/modules/tokens.py`).
+- M6R â€” rule-based requirement extraction (`backend/app/modules/requirements/rules.py`): explicit
   wording only, with source text, certainty (`explicit` / `hedged` / `uncertain`), parsed
   quantities and duplicate counts. Module 2 audit: conditionals, time/percent quantities, clause
   splitting, scope-aware duplicates and contradiction flags (`possible_conflicts`); contradictions and
   uncertain critical requirements lower recommendation confidence. Limitations: see
   `docs/acceptance-criteria.md` (Module 2).
-- M7R — rule-based generation of the two alternatives (`backend/app/modules/generation/rules.py`).
+- M7R â€” rule-based generation of the two alternatives (`backend/app/modules/generation/rules.py`).
   High-Context = original verbatim + a checklist quoting every requirement sentence word for word.
   Low-Token = original minus repeated requirement sentences, pleasantries, filler and extra
   whitespace; edits that would change any extracted requirement are reverted. An unchanged or
@@ -81,25 +81,25 @@ First-time setup: see "Backend setup" below, then `npm --prefix frontend install
 
 ### Demo checklist
 
-1. **Economic (offline, no key):** keep the sample prompt, mode Economic, model "None" → Optimize.
+1. **Economic (offline, no key):** keep the sample prompt, mode Economic, model "None" â†’ Optimize.
    Low-Token removes the greeting, the duplicate rule and filler; preservation Pass; approximate
    token labels; Quality: Unverified.
-2. **Costs:** pick *GPT OSS 20B*, set output tokens/run to 300 → costs per run and break-even appear,
-   with the catalog source and verification date. Pick a *Llama* model → "price unavailable".
+2. **Costs:** pick *GPT OSS 20B*, set output tokens/run to 300 â†’ costs per run and break-even appear,
+   with the catalog source and verification date. Pick a *Llama* model â†’ "price unavailable".
 3. **Balanced / Advanced (Groq):** needs `GROQ_API_KEY` in `backend/.env`. Shows `rules+llm` /
    `llm` generation, real token usage and overhead cost.
 4. **Honest failures:** a Groq error or a bad LLM output (e.g. drops a critical rule) appears as an
    alert and a labelled *Rules fallback*, never as success; run status becomes `partial`.
 5. **Copy / export:** copy any variant; "Export JSON report" downloads the full comparison.
 6. **Benchmark:** open "Paired benchmark", tick it, keep the two sample test inputs and criteria,
-   pick a Groq model → per-case 0-4 scores, verified quality, and (if earned) `high` confidence.
+   pick a Groq model â†’ per-case 0-4 scores, verified quality, and (if earned) `high` confidence.
    ~1 + 4 Groq calls per test case.
 
 ### MVP pipeline (what runs)
 
-validate → extract requirements (rules) → generate High-Context + Low-Token (rules, or Groq with
-rules fallback) → heuristic token estimates → rule-based preservation check → cost/break-even →
-staged recommendation (Low-Token only with ≥10% saving and every critical requirement passing;
+validate â†’ extract requirements (rules) â†’ generate High-Context + Low-Token (rules, or Groq with
+rules fallback) â†’ heuristic token estimates â†’ rule-based preservation check â†’ cost/break-even â†’
+staged recommendation (Low-Token only with â‰¥10% saving and every critical requirement passing;
 High-Context when the short version is unsafe; otherwise Original).
 
 **Paired benchmark (optional, Groq):** Original, High-Context and Low-Token run on the same test
@@ -110,7 +110,7 @@ every case is fully scored, otherwise the run is `partial` and quality stays Unv
 quality feeds the recommendation (Low-Token blocked if >2 percentage points below the original).
 Benchmark cost is reported separately from optimization overhead. `high` confidence needs a full
 5-case benchmark; fewer cases are shown as limited evidence. Limitations: no automatic retry on Groq
-rate limits (pace runs — the verified account has an 8,000 tokens/minute limit, ~2.5K tokens per case),
+rate limits (pace runs â€” the verified account has an 8,000 tokens/minute limit, ~2.5K tokens per case),
 the judge is the same Groq model, and responses include 400-character output excerpts.
 
 Deferred: LLM-assisted requirement extraction and LLM preservation judging (rules are used),
@@ -125,7 +125,7 @@ py -3.11 -m venv .venv
 .venv\Scripts\python -m pip install -r requirements.txt -r requirements-dev.txt
 ```
 
-Optional — Groq API key (needed only for Balanced/Advanced modes and benchmarking):
+Optional â€” Groq API key (needed only for Balanced/Advanced modes and benchmarking):
 
 ```bash
 copy .env.example .env
@@ -174,3 +174,6 @@ Calculation-dependent checks deferred to later modules are tracked in
 ```
 
 Tests never call real providers.
+
+# Commit 17 by akshatab15: 2026-10-25 02:08:00
+
